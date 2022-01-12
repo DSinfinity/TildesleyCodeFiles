@@ -1,5 +1,6 @@
 import pandas as pd
 from pandas.core.indexing import _iLocIndexer
+import numpy as np
 
 # Clean empty rows
 filename = input("File Direcotry: ")
@@ -18,8 +19,11 @@ df = df.assign(microStrain_FR = lambda x: (x.v2/6.58e-4))
 df = df.assign(microStrain_FL = lambda x: (x.v3/6.58e-4))
 df = df.assign(AccelerometerCenter_g = lambda x: (x.v8/4.51e-3))
 df = df.assign(Laser_mm = lambda x: (x.v10*100))
+#df["Velocity"] = np.gradient(df["Laser_mm"],df["Time"]).tolist()
+df["Velocity"] = np.polyfit(df["Laser_mm"],df["Time"],1).tolist()
 
-
+#check1=df.loc[(df["Time"] > 144), ["Time","Laser_mm","Velocity"]]
+#print(check1)
 
 print(df)
 
